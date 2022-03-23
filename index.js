@@ -42,13 +42,20 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-  
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = []
 }
-
-
-
-
+Person.prototype.eat = function(food) {
+  this.stomach.push(food)
+}
+Person.prototype.poop = function() {
+  this.stomach = []
+}
+Person.prototype.toString = function() {
+  return `${this.name}, ${this.age}`
+}
 
 
 
@@ -68,8 +75,28 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-  
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
+}
+
+Car.prototype.fill = function(gallons){
+  this.tank = this.tank + gallons
+}
+
+Car.prototype.drive = function(miles) {
+  this.odometer = this.odometer + miles;
+  let fuelUsage = miles/this.milesPerGallon;
+  this.tank = this.tank - fuelUsage
+  if (this.tank <= 0) {
+    fuelUsage = this.tank;
+    this.tank = this.tank - fuelUsage;
+    let milesDriven = fuelUsage * this.milesPerGallon;
+    this.odometer = this.odometer + milesDriven
+    console.log(`I ran out of fuel at ${this.odometer} miles`)
+  }
 }
 
 
@@ -80,18 +107,26 @@ function Car() {
     - Besides the methods on Person.prototype, babies also have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy
+ }
  
-}
+ Baby.prototype = Object.create(Person.prototype)
+ 
+ Baby.prototype.play = function() {
+   return `Playing with ${this.favoriteToy}`
+ }
+ 
 
 
 /* 
-  TASK 4
+TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. When 'this' is used without context, it refers to the window/global space.
+  2. When 'this' is used within an object, it refers to the object who's scope it is within.
+  3. When a new object is created using an object creator, 'this' refers to the new object that has been created.
+  4. When a .call, or a .apply function is called on an object, 'this' refers to the object that was passed as an argument.
 */
 
 
